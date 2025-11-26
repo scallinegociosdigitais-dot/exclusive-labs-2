@@ -83,37 +83,9 @@ const INITIAL_DATA: DailyRecord[] = [
 
 function App() {
   const [records, setRecords] = useState<DailyRecord[]>(() => {
-    try {
-      // Try to load from local storage
-      const saved = localStorage.getItem('redpulse_data');
-      if (!saved) return INITIAL_DATA;
-
-      const parsed = JSON.parse(saved);
-      
-      // Safety check: ensure it is an array
-      if (!Array.isArray(parsed)) {
-        console.warn('Dados corrompidos no localStorage, resetando para inicial.');
-        return INITIAL_DATA;
-      }
-
-      // Sanitize data: ensure all number fields exist to prevent NaNs in charts
-      return parsed.map((item: any) => ({
-        ...item,
-        leads: Number(item.leads) || 0,
-        sales: Number(item.sales) || 0,
-        revenue: Number(item.revenue) || 0,
-        investment: Number(item.investment) || 0,
-        contacts: Number(item.contacts) || 0,
-        scheduled: Number(item.scheduled) || 0,
-        attended: Number(item.attended) || 0,
-        testDrives: Number(item.testDrives) || 0,
-        approvals: Number(item.approvals) || 0,
-      }));
-
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      return INITIAL_DATA;
-    }
+    // Try to load from local storage
+    const saved = localStorage.getItem('redpulse_data');
+    return saved ? JSON.parse(saved) : INITIAL_DATA;
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
